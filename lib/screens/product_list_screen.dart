@@ -37,7 +37,7 @@ class _ProductListScreenState extends State<ProductListScreen> {
         builder: (context) => ProductFormScreen(product: product),
       ),
     );
-    
+
     // Si 'result' est true, c'est qu'une modification/création a eu lieu.
     if (result == true) {
       _refreshProducts();
@@ -76,7 +76,10 @@ class _ProductListScreenState extends State<ProductListScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Liste des Produits', style: TextStyle(color: Colors.white)),
+        title: const Text(
+          'Liste des Produits',
+          style: TextStyle(color: Colors.white),
+        ),
         actions: [
           // Sélecteur de devise (USD / FC)
           PopupMenuButton<Currency>(
@@ -93,7 +96,10 @@ class _ProductListScreenState extends State<ProductListScreen> {
               padding: const EdgeInsets.symmetric(horizontal: 12),
               child: Row(
                 children: [
-                  Text(_currencyService.symbol, style: const TextStyle(color: Colors.white)),
+                  Text(
+                    _currencyService.symbol,
+                    style: const TextStyle(color: Colors.white),
+                  ),
                   const Icon(Icons.arrow_drop_down, color: Colors.white),
                 ],
               ),
@@ -113,7 +119,11 @@ class _ProductListScreenState extends State<ProductListScreen> {
           } else if (snapshot.hasError) {
             return Center(child: Text('Erreur: ${snapshot.error}'));
           } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-            return const Center(child: Text('Aucun produit trouvé. Appuyez sur "+" pour en créer un.'));
+            return const Center(
+              child: Text(
+                'Aucun produit trouvé. Appuyez sur "+" pour en créer un.',
+              ),
+            );
           }
 
           final products = snapshot.data!;
@@ -121,7 +131,9 @@ class _ProductListScreenState extends State<ProductListScreen> {
             itemCount: products.length,
             itemBuilder: (context, index) {
               final product = products[index];
-              final category = _productService.getCategoryById(product.categoryId);
+              final category = _productService.getCategoryById(
+                product.categoryId,
+              );
               final categoryName = category?.name ?? 'Inconnue';
 
               return Card(
@@ -130,7 +142,10 @@ class _ProductListScreenState extends State<ProductListScreen> {
                 child: ListTile(
                   leading: CircleAvatar(
                     backgroundColor: Theme.of(context).primaryColor,
-                    child: Icon(category?.icon ?? Icons.inventory_2, color: Colors.white),
+                    child: Icon(
+                      category?.icon ?? Icons.inventory_2,
+                      color: Colors.white,
+                    ),
                   ),
                   title: Text(
                     product.name,
@@ -144,7 +159,9 @@ class _ProductListScreenState extends State<ProductListScreen> {
                       Text(
                         'Stock: ${product.availableStock}',
                         style: TextStyle(
-                          color: product.availableStock < 10 ? Colors.red : Colors.green,
+                          color: product.availableStock < 10
+                              ? Colors.red
+                              : Colors.green,
                           fontWeight: FontWeight.w600,
                         ),
                       ),
