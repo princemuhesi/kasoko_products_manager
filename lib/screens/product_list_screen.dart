@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../models/product.dart';
 import '../services/product_service.dart';
+import '../services/currency_service.dart';
 import 'product_form_screen.dart';
 
 class ProductListScreen extends StatefulWidget {
@@ -12,6 +13,7 @@ class ProductListScreen extends StatefulWidget {
 
 class _ProductListScreenState extends State<ProductListScreen> {
   final ProductService _productService = ProductService();
+  final CurrencyService _currencyService = CurrencyService();
   late Future<List<Product>> _productsFuture;
 
   @override
@@ -76,6 +78,27 @@ class _ProductListScreenState extends State<ProductListScreen> {
       appBar: AppBar(
         title: const Text('Liste des Produits', style: TextStyle(color: Colors.white)),
         actions: [
+          // Sélecteur de devise (USD / FC)
+          PopupMenuButton<Currency>(
+            onSelected: (c) {
+              setState(() {
+                _currencyService.setCurrency(c);
+              });
+            },
+            itemBuilder: (context) => [
+              const PopupMenuItem(value: Currency.usd, child: Text('USD (\$)')),
+              const PopupMenuItem(value: Currency.fc, child: Text('FC (CDF)')),
+            ],
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 12),
+              child: Row(
+                children: [
+                  Text(_currencyService.symbol, style: const TextStyle(color: Colors.white)),
+                  const Icon(Icons.arrow_drop_down, color: Colors.white),
+                ],
+              ),
+            ),
+          ),
           IconButton(
             icon: const Icon(Icons.refresh, color: Colors.white),
             onPressed: _refreshProducts,
@@ -117,7 +140,7 @@ class _ProductListScreenState extends State<ProductListScreen> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text('Catégorie: $categoryName'),
-                      Text('Prix: ${product.price.toStringAsFixed(2)} €'),
+                      Text('Prix: ${_currencyService.format(product.price)}'),
                       Text(
                         'Stock: ${product.availableStock}',
                         style: TextStyle(

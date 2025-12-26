@@ -38,7 +38,8 @@ class _ProductFormScreenState extends State<ProductFormScreen> {
     if (isEditing) {
       _nameController.text = widget.product!.name;
       _descriptionController.text = widget.product!.description;
-      _priceController.text = widget.product!.price.toString();
+      // Le prix est stocké en USD ; on l'affiche en USD dans le formulaire
+      _priceController.text = widget.product!.price.toStringAsFixed(2);
       _stockController.text = widget.product!.availableStock.toString();
       _selectedCategoryId = widget.product!.categoryId;
     }
@@ -102,7 +103,7 @@ class _ProductFormScreenState extends State<ProductFormScreen> {
               const SizedBox(height: 15),
 
               // Champ Prix
-              _buildTextField(_priceController, 'Prix (€)', Icons.attach_money, keyboardType: TextInputType.number),
+              _buildTextField(_priceController, 'Prix (USD)', Icons.attach_money, keyboardType: TextInputType.number),
               const SizedBox(height: 15),
 
               // Champ Stock disponible
